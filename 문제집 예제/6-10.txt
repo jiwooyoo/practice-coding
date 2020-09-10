@@ -1,0 +1,31 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#define INF 987654321
+#define MAX 300001
+
+using namespace std;   //표준 입출력을 위해
+
+bool decr(int a, int b) {
+	return a > b;
+}
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int arr[501];
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+
+	sort(&arr[0], &arr[n], decr);
+
+	for (int i = 0; i < n; i++)
+		cout << arr[i] << "\n";
+}

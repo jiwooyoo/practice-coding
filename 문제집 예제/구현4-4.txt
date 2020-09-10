@@ -1,0 +1,72 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<vector>
+#include<memory.h>
+#define INF 987654321
+#define MAX 202
+
+using namespace std;   //표준 입출력을 위해
+
+int dx[4] = {-1,0,1,0};
+int dy[4] = {0,1,0,-1};
+int arr[52][52];
+bool visited[52][52];
+int n, m, k;
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int n, m;
+	cin >> n >> m;
+	
+	int a, b, d;
+	cin >> a >> b >> d;
+	
+	memset(arr, -1, sizeof(arr));
+	memset(visited, false, sizeof(visited));
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cin >> arr[i][j];
+		}
+	}
+	visited[a][b] = true;
+	int cnt = 1;
+	while (1) {
+		int nx, ny;
+		bool check = false;
+
+		for (int i = 1; i <= 4; i++) {
+			nx = a + dx[(d + i) % 4];
+			ny = b + dy[(d + i) % 4];
+
+			if (!visited[nx][ny] && arr[nx][ny] == 0) {
+				cnt++;
+				a = nx;
+				b = ny;
+				d = (d + i) % 4;
+				visited[nx][ny] = true;
+				check = true;
+				break;
+			}
+		}
+
+		if (!check) {
+			nx = a - dx[d];
+			ny = b - dy[d];
+			if (arr[nx][ny] == 0 && !visited[nx][ny]) {
+				visited[a][b] = true;
+				cnt++;
+				a = nx;
+				b = ny;
+			}
+			else break;
+			
+		}
+	
+	}
+
+	cout << cnt << "\n";
+}

@@ -1,0 +1,87 @@
+#include<iostream> 
+#include <string>
+#include <vector>
+#include<memory.h>
+
+using namespace std;
+int visit[102][102];
+
+bool check_ki(int x, int y) {
+	if (y == 0) return true;
+	if (visit[x][y]>0) return true;
+
+	return false;
+}
+
+bool check_bo(int x,int y) {
+	if (visit[x][y] == 2 || visit[x+1][y] == 2) {
+		return true;
+	}
+	if (visit[x][y] == 1 && visit[x+1][y] == 1) return true;
+
+	return false;
+}
+
+vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
+    ios_base::sync_with_stdio(0);
+	cin.tie(0);
+    
+    vector<vector<int>> answer;
+    
+    memset(visit, 0, sizeof(visit));
+	for (int i = 0; i < build_frame.size(); i++) {
+		int x = build_frame[i][0];
+		int y = build_frame[i][1];
+		int a = build_frame[i][2];
+		int b = build_frame[i][3];
+
+		if (a == 0) { //기둥
+			if (b == 0) { //삭제
+				if (visit[x - 2][y] == 1 || visit[x + 1][y] == 1) continue;
+				else {
+					visit[x][y] = 0;
+				}
+			}
+			else {  //설치
+				if (check_ki(x, y)) {
+					visit[x][y] = 2;
+					visit[x][y + 1] = 2;
+				}
+			}
+		}
+		else {  //보
+			if (b == 0) {
+				if (visit[x - 2][y] == 1 || visit[x + 1][y] > 0 ) continue;
+				
+				else {
+					visit[x][y] = 0;
+				}
+			}
+			else {
+				if (check_bo(x, y)) {
+					visit[x][y] = 1;
+					visit[x+1][y] = 1;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i <= n; i++) {
+		for (int j = 0; j <= n; j++) {
+			if (visit[i][j] == 1) {  //보
+				if (visit[i + 1][j] == 0) continue;
+				//cout << i << " " << j << " ";
+				//cout << "1\n";
+                answer.push_back({i,j,1});
+			}
+			else if (visit[i][j] == 2) {  //기둥
+				if (visit[i][j + 1] == 0) continue;
+				//cout << i << " " << j << " ";
+				//cout << "0\n";
+                answer.push_back({i,j,0});
+			}
+		}
+	}
+    
+    return answer;
+}

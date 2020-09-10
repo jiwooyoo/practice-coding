@@ -1,0 +1,38 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#define INF 796796
+#define MAX 10002
+
+using namespace std;   //표준 입출력을 위해
+vector<int> v;
+
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int n;
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {
+		int coin;
+		cin >> coin;
+		v.push_back(coin);
+	}
+	
+	sort(v.begin(), v.end());
+
+	int res = 1;
+
+	for (int i = 0; i < n; i++) {
+		if (res < v[i]) break;
+		res += v[i];
+	}
+	
+
+	cout << res << "\n";
+}

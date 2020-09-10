@@ -1,0 +1,48 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#define INF 796796
+#define MAX 10002
+
+using namespace std;   //표준 입출력을 위해
+int dp[25][25] = { 0, };
+int arr[25][25] = { 0, };
+
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int test;
+	cin >> test;
+	for (int t = 0; t < test; t++) {
+		int n, m;
+		cin >> n >> m;
+
+		memset(arr, 0, sizeof(arr));
+		memset(dp, 0, sizeof(dp));
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				cin >> arr[i][j];
+			}
+		}
+
+		for (int i = 1; i <= m; i++) {
+			for (int j = 1; j <= n; j++) {
+				int num;
+				num = max(max(dp[j-1][i-1],dp[j][i-1]),dp[j+1][i-1]);
+				dp[j][i] = num + arr[j][i];
+			}
+		}
+
+		int res = 0;
+		for (int i = 1; i <= n; i++) {
+			res = max(res, dp[i][m]);
+		}
+		cout << res << "\n";
+	}
+
+}

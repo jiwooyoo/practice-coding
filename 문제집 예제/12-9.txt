@@ -1,0 +1,68 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#define INF 796796
+#define MAX 10002
+
+using namespace std;   //표준 입출력을 위해
+
+int solution(string s) {
+    ios_base::sync_with_stdio(0);
+	cin.tie(0);
+    
+    int answer = 0;
+    
+    int len = s.size();
+	int res = INF;
+	for (int i = 1; i <= len/2+2; i++) {
+		int total = 0;
+		string before;
+		vector<string> st;
+		int num = 1;
+		for (int j = 0; j < len; j++) {
+			before += s[j];
+			if ((j + 1) % i == 0) {
+				if (!st.empty() && before == st.back()) {
+					num++;
+                    if (j == len - 1) {
+						string some = to_string(num) + st.back();
+						st.pop_back();
+						st.push_back(some);
+					}
+				}
+				else {
+					if (num > 1) {
+						string some = to_string(num) + st.back();
+						st.pop_back();
+						st.push_back(some);
+					}
+					st.push_back(before);
+					num = 1;
+				}
+				before = "";
+			}
+            else if (j == len - 1) {
+                if (num > 1) {
+					string some = to_string(num) + st.back();
+					st.pop_back();
+					st.push_back(some);
+				//	cout << some << " ";
+				}
+				st.push_back(before);
+			}
+		}
+
+		for (int j = 0; j < st.size(); j++) {
+			total += st[j].size();
+		}
+		res = min(res, total);
+	}
+    
+    answer=res;
+    
+    return answer;
+}

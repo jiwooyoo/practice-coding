@@ -1,0 +1,95 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+
+using namespace std;
+
+int arr[102][102];
+int dir[4][2] = { {-1,0},{0,-1},{1,0},{0,1} };
+
+vector<pair<pair<int, int>, pair<int, int>>> bfs(int x1,int y1,int x2,int y2) {
+	vector<pair<pair<int, int>, pair<int, int>>> v;
+
+		for (int i = 0; i < 4; i++) {
+			int nx1 = x1 + dir[i][0];
+			int ny1 = y1 + dir[i][1];
+			int nx2 = x2 + dir[i][0];
+			int ny2 = y2 + dir[i][1];
+
+			if (arr[nx1][ny1] == 0 && arr[nx2][ny2] == 0) {
+				v.push_back({ {nx1, ny1}, {nx2, ny2} });
+			}
+		}
+
+		int move[2] = { -1,1 };
+		if (x1 == x2) {
+			for (int i = 0; i < 2; i++) {
+				if (arr[x1 + move[i]][y1] == 0 && arr[x2 + move[i]][y2] == 0) {
+					v.push_back({ {x1,y1},{x1 + move[i],y1} });
+					v.push_back({ {x2,y2},{x2 + move[i],y2} });
+				}
+			}
+		}
+		if(y1==y2) {
+			for (int i = 0; i < 2; i++) {
+				if (arr[x1][y1 + move[i]] == 0 && arr[x2][y2 + move[i]] == 0) {
+					v.push_back({ {x1,y1},{x1,y1 + move[i]} });
+					v.push_back({ {x2,y2},{x2,y2 + move[i]} });
+				}
+			}
+		}
+
+		return v;
+}
+
+int solution(vector<vector<int>> board) {
+    
+    int n=board.size();
+    memset(arr,-1,sizeof(arr));
+    for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			arr[i+1][j+1]=board[i][j];
+		}
+	}
+    
+    queue < pair<pair<pair<int, int>, pair<int, int>>,int> > q;
+	vector<pair<pair<int, int>, pair<int, int>>> visit;
+	q.push({ {{1,1},{1,2}},0 });
+	visit.push_back({ {1,1},{1,2} });
+
+    while (!q.empty()) {
+		int x1 = q.front().first.first.first;
+		int y1 = q.front().first.first.second;
+		int x2 = q.front().first.second.first;
+		int y2 = q.front().first.second.second;
+		int time = q.front().second;
+		q.pop();
+
+		if ((x1 == n && y1 == n) || (x2 == n && y2 == n)) {
+			return time;
+		}
+		vector<pair<pair<int, int>, pair<int, int>>> v = bfs(x1,y1,x2,y2);
+
+		for (int i = 0; i < v.size(); i++) {
+			bool check = true;
+			pair<pair<int, int>, pair<int, int>> p = v[i];
+
+			for (int j = 0; j < visit.size(); j++) {
+				if (p.first.first == visit[j].first.first&&p.first.second == visit[j].first.second&&p.second.first == visit[j].second.first&&p.second.second == visit[j].second.second) {
+					check = false;
+					break;
+				}
+			}
+
+			if (check) {
+				q.push({ p,time + 1 });
+				visit.push_back(p);
+			}
+		}
+	}
+    
+}

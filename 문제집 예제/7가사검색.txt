@@ -1,0 +1,82 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+
+using namespace std;
+
+int bin(int start, int end, string s) {
+	if (start > end) return -1;
+  //  if(s[s.size() - 1] == '?' && s[0]=='?') return ;
+    
+	int mid = (start + end) / 2;
+	int res;
+	
+	if (s[s.size() - 1] == '?') {
+		if (s[mid] == '?') {
+            while(s[mid]=='?'){
+                mid--;
+            }
+            res=mid+1;
+		}
+		else {
+			res = bin(mid+1, end, s);
+		}
+	}
+	else{ 
+		if (s[mid] == '?') {
+			while(s[mid]=='?'){
+                mid++;
+            }
+            res=mid-1;
+		}
+		else {
+			res = bin(start, mid-1, s);
+		}
+	}
+    
+	return res;
+}
+
+bool comp(string s1, string s2, int start, int end){
+    for(int i=start;i<=end;i++){
+        if(s1[i]!=s2[i]) return false;
+    }
+    return true;
+}
+
+vector<int> solution(vector<string> words, vector<string> queries) {
+    vector<int> answer;
+    int wsize=words.size();
+    int qsize=queries.size();
+    
+    for(int i=0;i<qsize;i++){
+        int cnt=0;
+        int low, high;
+        bool check=false;
+        if(queries[i][0]=='?'&&queries[i][queries[i].size()-1]=='?')
+            check=true;
+        else if(queries[i][0]=='?'){
+            low=bin(0,queries[i].size()-1,queries[i])+1;
+            high=queries[i].size()-1;
+        }
+        else{
+            low=0;
+            high=bin(0,queries[i].size()-1,queries[i])-1;
+        }
+        
+        for(int j=0;j<wsize;j++){
+            if(words[j].size()==queries[i].size()){
+                if(check) cnt++;
+                else if(comp(words[j],queries[i],low,high)){
+                    cnt++;
+                }
+            }
+        }
+        
+        answer.push_back(cnt);
+    }
+    return answer;
+}

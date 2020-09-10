@@ -1,0 +1,34 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#define INF 987654321
+#define MAX 102
+
+using namespace std;   //표준 입출력을 위해
+int dp[MAX] = { 0, };
+int arr[MAX] = { 0, };
+
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int n;
+	cin >> n;
+
+	for (int i = 1; i <= n; i++) {
+		cin >> arr[i];
+	}
+
+	dp[1] = arr[1];
+	dp[2] = max(arr[1], arr[2]);
+//	dp[3] = max(dp[1] + arr[3], arr[2]);
+	for (int i = 3; i <= n; i++) {
+		dp[i] = max(dp[i-1], dp[i - 2] + arr[i]);
+	}
+
+	cout << dp[n] << "\n";
+}

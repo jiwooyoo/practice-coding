@@ -1,0 +1,56 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#define INF 987654321
+#define MAX 300001
+
+using namespace std;   //표준 입출력을 위해
+vector<int> v;
+
+int tree(int len) {
+	int sum = 0;
+	for (int i = 0; i < v.size(); i++) {
+		if (v[i] > len) {
+			sum += (v[i] - len);
+		}
+	}
+	
+	return sum;
+}
+
+int bin(int start, int end, int num) {
+	if (start > end) return -1;
+
+	int mid = (start + end) / 2;
+	
+	int re;
+	if (tree(mid) < num) return bin(start, mid - 1, num);
+	else {
+		re = mid;
+		re=max(re, bin(mid + 1, end, num));
+		return re;
+	}
+}
+
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int n, m;
+	cin >> n >> m;
+	
+	for (int i = 0; i < n; i++) {
+		int key;
+		cin >> key;
+		v.push_back(key);
+	}
+
+	sort(v.begin(), v.end());
+
+	cout << bin(v[0], v[n - 1], m) << "\n";
+
+}

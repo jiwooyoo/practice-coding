@@ -1,0 +1,80 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#define INF 796796
+#define MAX 10002
+
+using namespace std;   //표준 입출력을 위해
+vector<int> v[501];
+priority_queue<int> pq;
+int root[100002];
+int connect[250002];
+int time[502] = { 0, };
+int dp[502] = { 0, };
+
+int parent(int num) {
+	if (root[num] != num) {
+		root[num]=parent(root[num]);
+	}
+	return root[num];
+}
+
+void union_p(int a, int b) {
+	a = parent(a);
+	b = parent(b);
+	if (a < b)
+		root[b] = a;
+	else root[a] = b;
+}
+
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int n;
+	cin >> n;
+
+	for (int i = 1; i <= n; i++) {
+		int t;
+		cin >> t;
+		time[i] = t;
+		dp[i] = t;
+		int cnt=0;
+		while (1) {
+			int node;
+			cin >> node;
+			if (node == -1) break;
+			cnt++;
+			v[node].push_back(i);
+		}
+		if (cnt == 0) {
+			pq.push(-1 * i);
+		}
+		connect[i] = cnt;
+	}
+	
+	while (!pq.empty()) {
+		int node = -1*pq.top();
+		pq.pop();
+	
+		for (int i = 0; i < v[node].size(); i++) {
+			connect[v[node][i]] -= 1;
+			dp[v[node][i]] = max(dp[v[node][i]], dp[node] + time[v[node][i]]);
+		//	dp[v[node][i]] += time[node];
+		//	cout << v[node][i] <<" "<< dp[v[node][i]]<< "\n";
+			if (connect[v[node][i]]==0) {
+				pq.push(-1*v[node][i]);
+				//time[v[node][i]] = dp[v[node][i]];
+				//dp[v[node][i]] += time[v[node][i]];
+			}
+		}
+	}
+
+	for (int i = 1; i <= n; i++) {
+		cout << dp[i] << "\n";
+	}
+}

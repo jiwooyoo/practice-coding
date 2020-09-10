@@ -1,0 +1,40 @@
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#define INF 987654321
+#define MAX 30001
+
+using namespace std;   //표준 입출력을 위해
+int dp[MAX] = { 0, };
+
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int n;
+	cin >> n;
+
+	dp[1] = 0;
+
+	int i = 1;
+	
+	for (int i = 2; i <= n; i++) {
+		int n1=INF, n2=INF, n3=INF, n4=INF;
+		if (i % 5 == 0) n1 = dp[i / 5] + 1;
+		if (i % 3 == 0) n2 = dp[i / 3] + 1;
+		if (i % 2 == 0) n3 = dp[i / 2] + 1;
+		 
+		n4 = dp[i-1] + 1;
+		
+
+		dp[i] = min(min(n1, n2), min(n3, n4));
+
+	}
+	
+		
+	cout << dp[n] << "\n";
+}
