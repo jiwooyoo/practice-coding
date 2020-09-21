@@ -1,0 +1,77 @@
+/* 삼성 SW 역량테스트 문제
+   백준 15686번 (구현 문제)
+   교재 332-334 */
+
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#include<deque>
+
+#define INF 987654321
+#define MAX 10002
+
+using namespace std;   //표준 입출력을 위해
+int arr[52][52];
+vector<pair<int, int> > h;
+vector<pair<int, int> > s;
+vector<int> v;
+bool select[2505];
+int res = INF;
+
+int dist(int x1, int y1, int x2, int y2) {
+	return abs(x1 - x2) + abs(y1 - y2);
+}
+
+int find_dist() {
+	int total = 0;
+	for (int i = 0; i < h.size(); i++) {
+		int num = INF;
+		for (int j = 0; j < v.size(); j++) {
+			num=min(num,dist(h[i].first, h[i].second, s[v[j]].first, s[v[j]].second));
+		}
+		total += num;
+	}
+
+	return total;
+}
+
+void select_shop(int start,int num) {
+	if (num == 0) {
+		res=min(res,find_dist());
+	}
+
+	for (int i = start; i < s.size(); i++) {
+		if (select[i] == true) continue;
+		select[i] = true;
+		v.push_back(i);
+		select_shop(i, num - 1);
+		select[i] = false;
+		v.pop_back();
+	}
+}
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int n ,m;
+	cin >> n >> m;
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cin >> arr[i][j];
+			if (arr[i][j] == 1) {
+				h.push_back({ i,j });
+			}
+			else if (arr[i][j] == 2) {
+				s.push_back({ i,j });
+			}
+		}
+	}
+
+	select_shop(0,m);
+	cout << res << "\n";
+}
