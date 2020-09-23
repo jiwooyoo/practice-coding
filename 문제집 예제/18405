@@ -1,0 +1,63 @@
+/* 코딩테스트 책 경쟁적 전염
+  18405번 p.344-345 */
+
+
+#include<iostream> 
+#include<algorithm>
+#include<string>
+#include<queue>
+#include<stack>
+#include<vector>
+#include<memory.h>
+#include<deque>
+
+#define INF 987654321
+#define MAX 10002
+
+using namespace std;   //표준 입출력을 위해
+int arr[202][202];
+vector<pair<int, int> > v;
+
+int dist(int x1, int y1, int x2, int y2) {
+	return abs(x1 - x2) + abs(y1 - y2);
+}
+
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	int n ,k;
+	cin >> n >> k;
+
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			cin >> arr[i][j];
+			if (arr[i][j] != 0)
+				v.push_back({ i,j });
+		} 
+	}
+
+	int s, x, y;
+	cin >> s >> x >> y;
+
+	int res = INF;
+	int index = 0;
+	for (int i = 0; i < v.size(); i++) {
+		if (res > dist(x, y, v[i].first, v[i].second)) {
+			res = dist(x, y, v[i].first, v[i].second);
+			index = i;
+		}
+		else if (res == dist(x, y, v[i].first, v[i].second)) {
+			if (arr[v[index].first][v[index].second] > arr[v[i].first][v[i].second]) {
+				index = i;
+			}
+		}
+	}
+
+	if (res > s) {
+		cout << "0\n";
+	}
+	else {
+		cout << arr[v[index].first][v[index].second] << "\n";
+	}
+}
